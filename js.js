@@ -1,5 +1,6 @@
 import {readFileSync} from "fs"
 import {lexer} from "./lexer.js"
+import {parser} from "./parser.js"
 const fileName = "./source.js"
 
 
@@ -20,7 +21,13 @@ function trace(name, v){
 
 console.log("start")
 
-    console.log([...lexer(fileName, input)])
+
+
+const ast = parser(fileName,lexer(fileName, input))
+
+
+
+console.dir(ast, {depth: null})
 
 
 

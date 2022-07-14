@@ -23,7 +23,7 @@ export function* lexer(fileName,str){
 
     function number(){
         let buffer = ""
-
+        const start = {line, column}
         while(+char || char === "0"){
             // char = str[cursor]
         
@@ -32,9 +32,14 @@ export function* lexer(fileName,str){
         }
 
         if(buffer.length >= 1){
+         const end = {line, column}
         return{
                 type: "NumericLiteral", 
-               value: +buffer
+               value: +buffer,
+                 loc: {
+                 start,
+                 end
+              }
             }
         }
 
@@ -47,10 +52,17 @@ export function* lexer(fileName,str){
 
 
 function operator(){
+      
       if(char === "+"){
+          const start = {line, column}
           next()
+          const end = {line, column}
           return {
               type: "plusOperator", 
+              loc: {
+                 start,
+                 end
+              }
 
 
           }
@@ -66,8 +78,11 @@ function eof(){
      if(char === undefined){
         //  else if is unfrequent(end of file)
        // cursor++ // go over str length, to break out of all dependent loops
+       const start = {line, column}
+     //  const end = start
         return {
-            type: "EndofFileToken"
+            type: "EndofFileToken",
+            loc:{start, end: start}
         }
      }
      
@@ -137,7 +152,7 @@ function eol(){
     const maybeEOF = eof()
     // console.log(maybeEOF)
     if(maybeEOF){
-    
+      yield maybeEOF
        break;
     }
     // else if(char === undefined){

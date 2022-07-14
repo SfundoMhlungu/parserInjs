@@ -1,4 +1,4 @@
-# Learning to build a JavaScript compiler in JS
+# Learning to build a JavaScript parser in JS
 
 
 
