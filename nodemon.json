@@ -1,0 +1,9 @@
+{
+    "events": {
+        "start": "node -e console.clear()"
+    },
+
+    "delay": "100"
+}
+
+
