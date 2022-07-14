@@ -33,7 +33,7 @@ export function* lexer(fileName,str){
 
         if(buffer.length >= 1){
         return{
-                type: "number", 
+                type: "NumericLiteral", 
                value: +buffer
             }
         }
@@ -45,13 +45,29 @@ export function* lexer(fileName,str){
         return char === " " || char === "\t"
     }
 
+
+function operator(){
+      if(char === "+"){
+          next()
+          return {
+              type: "plusOperator", 
+
+
+          }
+      }
+
+      return null
+     
+
+}
+
 function eof(){
     //  char = str[cursor]
      if(char === undefined){
         //  else if is unfrequent(end of file)
        // cursor++ // go over str length, to break out of all dependent loops
         return {
-            type: "EOF"
+            type: "EndofFileToken"
         }
      }
      
@@ -105,7 +121,7 @@ function eol(){
   for(;;){
      
     //   console.log(cursor)
-    let token =  whitespace() || number() ||  eol() || eof()
+    let token =  whitespace() || operator()|| number() ||  eol(); 
     
  
     if(token){
@@ -115,9 +131,14 @@ function eol(){
 
         yield token
 
-        if(token.type === "EOF"){
-            break;
-        }
+        continue
+    }
+    
+    const maybeEOF = eof()
+    // console.log(maybeEOF)
+    if(maybeEOF){
+    
+       break;
     }
     // else if(char === undefined){
     //     //  else if is unfrequent(end of file)
@@ -126,9 +147,9 @@ function eol(){
     //     }
 
     // } 
-    else{
+   
         throw new SyntaxError(`Unxepected character "${char}" at ${fileName}:${line}:${column}`)
-    }
+   
 
 
   }
