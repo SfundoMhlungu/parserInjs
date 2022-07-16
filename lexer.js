@@ -16,7 +16,7 @@ export function* lexer(fileName,str){
     }
    function next(){
        cursor++
-       char = str[cursor]
+        char = str[cursor]
        column++
    }
 
@@ -67,6 +67,21 @@ function operator(){
 
           }
       }
+
+      if(char === "*"){
+        const start = {line, column}
+        next()
+        const end = {line, column}
+        return {
+            type: "mulOperator", 
+            loc: {
+               start,
+               end
+            }
+
+
+        }
+    }
 
       return null
      

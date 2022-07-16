@@ -37,6 +37,21 @@ return null
 }
 
 
+function mulOperator(){
+   if(token.type === "mulOperator"){
+       const _token = token
+       next()
+       return _token
+       
+   
+   }
+
+
+return null
+}
+
+
+
 function BinaryExpression(){
   const left = NumericLiteral()
    if(!left) return null;
@@ -46,8 +61,8 @@ function BinaryExpression(){
 
 
 function BinaryExpressionT(left){
-  const plus = plusOperator()
-  if(!plus) return left;
+  const op = plusOperator() || mulOperator()
+  if(!op) return left;
   const right = NumericLiteral()
   if(!right) throw new Error(`expected NumericLiteral token but got ${token.type} at ${fileName}:${token.loc.start.line}:${token.loc.start.column}`);
   
@@ -57,7 +72,7 @@ function BinaryExpressionT(left){
   const node =  {
     type: "BinaryExpression", 
     left, 
-    operatorToken: plus,
+    operatorToken: op,
     right
   }
 // nesting children
